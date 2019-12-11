@@ -97,7 +97,6 @@ class ExternalSelector:
             b = (int(pos[2] * self.width), int(pos[3] * self.height))
             self.selections.append(   (int(pos[0] * self.width), int(pos[1] * self.height), int(pos[2] * self.width), int(pos[3] * self.height)   ))
             self.preview = cv2.rectangle(self.preview, a, b, (0,255,0), 2)
-            cv2.imwrite('preview.jpg', self.preview)
 
         
 
@@ -150,8 +149,8 @@ class Tracker():
 
             success, frame = cap.read()
             if not success or self.countimage == self.lastFrame:
-                cv2.imwrite('img_path{}_lastframe.jpg'.format(self.countimage), previous_frame)
-                self.logger.info("\n Last Image save in your working directory !")
+                # cv2.imwrite('img_path{}_lastframe.jpg'.format(self.countimage), previous_frame)
+                # self.logger.info("\n Last Image save in your working directory !")
                 break
 
             previous_frame = frame
