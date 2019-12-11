@@ -1,0 +1,1207 @@
+
+<html>
+    <head>
+            <link href="https://fonts.googleapis.com/css?family=Solway&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+            <style>
+            
+            body{
+                overflow: hidden;
+                font-family: 'Solway', serif;
+            }
+            
+            #frame-div{
+                /* background-image: url("/static/loading.gif");
+                background-repeat: no-repeat;
+                background-position: center; */
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                transition: .5s;
+                
+            }
+            
+            #sidebar-wrapper{
+                background-color: white;
+                position:absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 0;
+                transition: .3s;
+            }
+            
+            
+            
+            #toggle-sidebar-button{
+                position: absolute;
+                left: 0px;
+                top: 50%;
+                width: 50px;
+                height: 100px;
+                background-color: #99cf83;
+                border-bottom-left-radius: 50px;
+                border-top-left-radius: 50px;
+                /* border: 10px solid gray; */
+                border-right: 0;
+                z-index: 10;
+                transition: .3s;
+                top: 50%;
+                transform: translate(0, -50%);
+                opacity: .8;
+                animation: blinker .5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
+            }
+            @keyframes blinker { to { opacity: 0; } }
+            
+            #toggle-sidebar-button:hover{
+                opacity: 1;
+            }
+            
+            #toggle-sidebar-button:focus{
+                outline: none;
+            }
+            
+            #button-overlay{
+                position: absolute;
+                right: 50px;
+                height: 100%;
+                width: 0;
+                background-color: none;
+                transition: .3s;
+            }
+            
+            #videofeed {
+                display: inline-block;
+                overflow: hidden;
+            }
+            
+            #videofeed img{
+                width: 100%;
+                height: 100%;
+                object-fit: fill;
+                overflow:hidden;
+                display: block;
+                transition: transform .4s;
+            }
+            
+            /* ================ */
+            
+            #sidebar-div {
+                display: flex;
+                float: right;
+                grid-area: sidebar;
+                padding: 0px;
+                margin: 0px;
+                transition: all 0.5s;
+                width: 100%;
+                height: 100%;
+                flex-direction: column;
+            }
+            
+            
+            #svg-overlay{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: none;
+                
+            }
+            .tab {
+              overflow: hidden;
+              border: 1px solid #ccc;
+              background-color: #f1f1f1;
+            }
+            
+            
+            .tab button {
+              background-color: inherit;
+              width: 33%;
+              float: left;
+              border: none;
+              outline: none;
+              cursor: pointer;
+              padding: 5% 16px;
+              transition: 0.1s;
+            }
+            
+            .tab button:hover {
+              background-color: #ddd;
+            }
+            
+            .tab button.active {
+              background-color: rgb(95, 161, 247);
+            }
+            
+            .tabcontent {
+              display: none;
+              padding: 0px 0px;
+              border: 1px solid #ccc;
+              border-top: none;
+              margin: 0;
+              flex-grow: 1;
+            
+            }
+            #start-button {
+                font-size: 16px;
+                cursor: pointer;
+                transition: 0.1s;
+                outline: none;
+                margin-bottom: 20px;
+            }
+            
+            #start-button:hover {
+            background-color: rgb(203, 250, 171);
+            }
+
+            #change-button{
+                font-size: 16px;
+                cursor: pointer;
+                transition: 0.1s;
+                outline: none;
+            }
+            
+            #change-button:hover{
+                background-color: rgb(161, 161, 161);
+            }
+            .sidebar-element {
+                background-color: white;
+                margin: 0px;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
+                border-bottom-color: gray;
+                height: 50px;
+                width: 100%;
+            }
+            
+            .sidebar-element-big {
+                height: auto;
+            }
+            
+            #sidebar-title {
+                margin: 0px;
+                padding: 7%;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
+                border-bottom-color: gray;
+            }
+            
+            
+            .sidebar-element-text {
+                grid-area: text;
+                padding-left: 5px;
+                text-align: left;
+                font-size: 22px;
+            }
+            
+            .ui-slider {
+                height: 12px;
+                width: 90%;
+                margin: auto;
+            }
+            
+            .ui-slider .ui-slider-handle {
+                border-radius: 18px;
+                height: 30px;
+                width: 30px;
+                top: -10px;
+                margin-left: -9px;
+                border: 1px solid white; 
+            
+            }
+            
+            .ui-slider .ui-state-focus{
+                outline: none;
+                -moz-box-shadow: none;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+            }
+            
+            .slider-container {
+                padding: 20px;
+            }
+            
+            input[type=text] {
+              border: #f2f2f2;
+              background-color: white;
+              text-align: center;
+              font-size: 20px;
+            }
+            
+            #display-size {
+                padding: 0px;
+                width: 70px;
+            }
+            
+            /* input[type="text"]
+            {
+                font-family: 'Times New Roman';
+            } */
+            
+            #max-particules {
+                width: 40px;
+            }
+            
+            .checkbox-wrapper{
+                grid-area: checkbox;
+                text-align: right;
+            }
+            .checkbox{
+                width: 20px;
+                transform: scale(1.5);
+            
+                position: relative;
+                left: -10px;
+                top: 15px;
+            
+                vertical-align: middle;
+            
+            }
+            
+            .sidebar-element-grid{
+                display: grid;
+                grid-template-areas:
+                    'text checkbox  ';
+            }
+            
+            #add-button{
+              background-color: inherit;
+              width: 100%;
+              float: left;
+              border: none;
+              outline: none;
+              cursor: pointer;
+              padding: 5% 16px;
+              transition: 0.1s;
+            }
+            
+            #add-button:hover {
+              background-color: #ddd;
+            }
+            
+            #add-button:active {
+              background-color: rgb(95, 161, 247);
+            }
+            
+            #hidden-div {
+                border: 1px dotted #000;
+                position: absolute;
+                z-index: 1000;
+            }
+            
+            #mySelections, #myObjectives{
+              background-color: inherit;
+              width: 100%;
+              height: 50%;
+              overflow: scroll;
+              margin: 0px;
+              background-color: white;
+              border-top-style: solid;
+              border-top-width: 1px;
+              border-top-color: gray;
+            }
+            
+            #mySelections{
+                height: 59%;
+            }
+            
+            #place-holder-div{
+                height: 27%;
+            }
+            
+            .selection-div , .objective-div{
+                background-color: white;
+                height: 15%;
+                width: 100%;
+                border: 1px dotted #000;
+                float: left;
+                font-size: 16px;
+                font-weight: 100;
+                transition: 0.2s;
+            
+            }
+            
+            
+            .selection-div:hover, .objective-div:hover{
+                background-color: #ddd;
+            }
+            
+            #bolding-rectangle{
+                border: 4px solid red;
+                position: absolute;
+            }
+            
+            .trash-btn {
+                background-color: inherit;
+                width: 50px;
+                height: 100%;
+                float: right;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                margin: 0;
+                top: 0;
+            }
+            
+            .trash-btn:hover{
+                background-color: rgb(255, 129, 129);
+            }
+            
+            .ruler-btn {
+                background-color: inherit;
+                width: 50px;
+                height: 100%;
+                float: right;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                margin: 0;
+                top: 0;
+            }
+            
+            .ruler-btn:hover {
+                background-color: rgb(139, 75, 155);
+            } 
+            
+            
+            
+            .selection-text-div, .objective-text-div, .size-div{
+                margin: 10px;
+                margin-right: 0px;
+                margin-left: 10px;
+                float: left;
+                display: inline-block;
+                text-align: left;
+                height: 100%;
+                top: 10px;
+            }
+            
+            input, select, textarea, button{font-family: 'Solway', serif;}
+            body{
+                font-family: 'Solway', serif;
+            }
+            
+            </style>
+            <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+            <title>Preview</title>
+    </head>
+    <div id="frame-div">
+        <div id="videofeed">
+                <img src="{{ url_for('video_feed_preview') }}" id="videofeed-img">
+                <svg id="svg-overlay"></svg>
+        </div>
+    </div>
+    <div id="button-overlay">
+            <button id="toggle-sidebar-button" onclick="toggleSidebar()" ></button>
+    </div>
+    <!-- <div id="bolding-rectangle" hidden></div> -->
+    <div id="sidebar-wrapper">
+            <div id="sidebar-div">
+                    <div id="sidebar-title">Settings</div>
+                    <div class="sidebar-element">
+                        <div class="tab">
+                            <button class="tablinks"  onclick="settingType(event, 'auto')">AUTO</button>
+                            <button class="tablinks" id="defaultOpen" onclick="settingType(event, 'manual')">MANUAL</button>
+                            <button class="tablinks" onclick="settingType(event, 'objectives')">OBJECTIVES</button>
+                        </div>
+                    </div>
+                    <div id="auto" class="tabcontent">
+                        <div class="sidebar-element">
+                            <div class="sidebar-element-text">Video = {{videopath}}</div>
+                        </div>
+                        
+                        <div class="sidebar-element sidebar-element-big">
+                            <div class="sidebar-element-text">Particles sizes = [<input type="text" id="display-size">]</div>
+                            <div class="slider-container">
+                                <div id="slider-size"></div>
+                            </div>
+                        </div>
+        
+                        <div class="sidebar-element">
+                            <div class="sidebar-element-text">N particles = <input type="number" id="max-particules" min="0" value="{{maxparticle}}" oninput="sendMaxParticules()"></div>   
+                        </div>
+        
+                        <!-- <div class="sidebar-element">
+                                <div id="particles-detected" class="sidebar-element-text">Particles detected = </div>
+                        </div> -->
+        
+                        <div class="sidebar-element sidebar-element-grid">
+                            <div class="sidebar-element-text">Labels</div>
+                            <div class="checkbox-wrapper"><input type="checkbox" name="label" class="checkbox" value="True" id="label-checkbox" onclick="sendCheckbox()"></div>
+                        </div>
+                        <div class="sidebar-element" id="place-holder-div"></div>
+        
+        
+                        
+                    </div>
+                    <div id="manual" class="tabcontent">
+                        <div class="sidebar-element">
+                            <button id="add-button" onclick="DrawSelectionOnScreen()"><p>Add new Selection</p><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div id="mySelections"></div>
+                        
+        
+                        <div id="hidden-div" hidden></div>
+                        
+                    </div>
+                    <div id="objectives" class="tabcontent">
+                            <div class="sidebar-element">
+                                    <button id="add-button" onclick="addObjective()"><p>Calibrate new objective</p><i class="fas fa-plus"></i></button>
+                                </div>
+                            <div id="myObjectives"></div>
+                    </div>
+                    <button id="change-button" class="sidebar-element" onclick="openDialogue()">Change file<br><i class="fas fa-exchange-alt"></i></button>
+                    <button onclick="start_tracking()" id="start-button" class="sidebar-element">Start Tracking<br><i class="fas fa-play"></i></button>
+
+    </div>
+    <form action="{{ url_for('preview') }}" , method="get" id="fileform">
+            <input type="file" id="videopath" class="inputfile"><br>
+            <label for="videopath" class="inputlabel" ><b></b></label>
+    </form>
+    
+</html>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+document.getElementById("sidebar-wrapper").style.width = "0"
+sidebarState = 0
+
+
+
+function openDialogue(){
+    document.getElementById('videopath').click()
+}
+var form = document.getElementById("fileform");
+var input = document.getElementById('videopath');
+
+
+input.onchange = function(e) { 
+  var dataPipe = new Proxy({  minParticlesSize : 0,
+                            maxParticlesSize : 50,
+                            label : false,
+                            numberOfParticlesToShow : 10,
+                            numberOfParticlesDetected : null,
+                            videopath : input.value,
+                            state : 0
+                            }, {
+  set: function(target, prop, value, receiver) {
+    target[prop] = value;
+    console.log("setter", JSON.stringify(dataPipe));
+    $.post( "/testdata", {
+            'data' : JSON.stringify(dataPipe)});
+    return true;
+  }
+})
+dataPipe.videopath = input.value
+    form.submit()
+    
+
+};
+
+function showSidebar(){
+    console.log('showsidebar');
+    var btn = document.getElementById("toggle-sidebar-button")
+    document.getElementById("sidebar-wrapper").style.width = "20%"   
+    document.getElementById("button-overlay").style.width = "20%"
+    document.getElementById("toggle-sidebar-button").style.left = "50px"
+    btn.style.borderBottomLeftRadius = "0"
+    btn.style.borderTopLeftRadius = "0"
+    btn.style.borderBottomRightRadius = "50px"
+    btn.style.borderTopRightRadius = "50px"
+    sidebarState = 1
+    console.log("state after showsidebar", sidebarState);
+    document.getElementById("frame-div").style.opacity = ".8"
+    document.getElementById("toggle-sidebar-button").style.animation = "none"
+    
+}
+
+function hideSidebar(){
+    console.log("hidesidebar");
+    var btn = document.getElementById("toggle-sidebar-button")
+    document.getElementById("sidebar-wrapper").style.width = "0"
+    document.getElementById("button-overlay").style.width = "0"    
+    document.getElementById("toggle-sidebar-button").style.left = "0px"
+    btn.style.borderBottomRightRadius = "0"
+    btn.style.borderTopRightRadius = "0"
+    btn.style.borderBottomLeftRadius = "50px"
+    btn.style.borderTopLeftRadius = "50px"
+    sidebarState = 0
+    console.log("state after hidesidebar", sidebarState);
+    document.getElementById("frame-div").style.opacity = "1"
+    
+}
+
+function toggleSidebar(){
+    console.log('toggle');
+        console.log(sidebarState);
+        
+    if (sidebarState == 0){
+        
+        
+        showSidebar()
+        
+
+    } else{
+        hideSidebar()
+    }
+}
+
+
+// ==========
+var dataPipe = new Proxy({  minParticlesSize : 0,
+                            maxParticlesSize : 50,
+                            label : false,
+                            numberOfParticlesToShow : 10,
+                            numberOfParticlesDetected : null,
+                            // videopath : null,
+                            state : 0,
+                            selections : objSelectionsBackEnd,
+                            selectionType : null
+                            }, {
+  set: function(target, prop, value, receiver) {
+    target[prop] = value;
+    console.log("setter", JSON.stringify(dataPipe));
+    $.post( "/testdata", {
+            'data' : JSON.stringify(dataPipe)});
+    return true;
+  }
+})
+
+// document.getElementById("tips").innerHTML = '<img src="static/selections.png" alt="selection help" >'
+
+function settingType(evt, type) {
+    dataPipe.selectionType = type;
+    if (type == "objectives"){
+        console.log(JSON.parse(localStorage.getItem("objectives")));
+        
+        if (JSON.parse(localStorage.getItem("objectives")).length >= 1){
+
+        // document.getElementById("tips").innerHTML = '<img src="static/calibrationhelp2" alt="go measure selections" >'
+        } else {
+            // document.getElementById("tips").innerHTML = '<img src="static/calibrationhelp.png" alt="calibrate objective" >'
+        }
+    }
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(type).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+document.getElementById("defaultOpen").click();
+
+
+
+
+$( function() {
+$( "#slider-size" ).slider({
+  range: true,
+  min: 0,
+  max: 50,
+  values: [ 0, 50 ],
+  slide: function( event, ui ) {
+    $( "#display-size" ).val(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+    // $.post( "/preview", {
+    // 'minSizeSlider' : ui.values[ 0 ], 'maxSizeSlider' : ui.values[ 1 ]
+    //     });
+    dataPipe.minParticlesSize = ui.values[0];
+    dataPipe.maxParticlesSize = ui.values[1];
+  }
+});
+$( "#display-size" ).val($( "#slider-size" ).slider( "values", 0 ) +
+  " ; " + $( "#slider-size" ).slider( "values", 1 ) );
+} );
+
+function sendMaxParticules() {
+    data = document.getElementById("max-particules").value;
+    // $.post( "/preview", {
+    // 'maxParticles' : data});
+    dataPipe.numberOfParticlesToShow = data;
+}
+
+function sendCheckbox() {
+  var checkBox = document.getElementById("label-checkbox");
+
+  if (checkBox.checked == true){
+      console.log("test");
+
+    // $.post( "/preview", {
+    // 'label' : "True"});
+    dataPipe.label = true;
+  } else {
+    // $.post( "/preview", {
+    // 'label' : "False"});
+    dataPipe.label = false;
+  }
+}
+
+// function getUpdatedDataFromServer(){
+//     $.get("{{url_for('data')}}", function(data, status){
+//         var returnedData = JSON.parse(data);      
+//       document.getElementById("particles-detected").innerHTML = "Particles detected = " + returnedData.numParticles;
+//       });
+// };
+
+
+
+$(document).change(function(e){
+            });
+            
+var zoomScaleMeasure = 2
+var measure = function(buttonObject){
+    hideSidebar()
+    var svg = document.getElementById("svg-overlay");
+    svg.style.display="block"
+    var inSelection = true;
+    var inDrawning = false;
+
+    function drawLine(){
+        if (document.getElementById("line")){
+        document.getElementById("line").remove();}
+        var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+        newLine.setAttribute('id','line');
+        newLine.setAttribute('x1',x1);
+        newLine.setAttribute('y1',y1);
+        newLine.setAttribute('x2',x2);
+        newLine.setAttribute('y2',y2);
+        newLine.setAttribute("stroke", "rgb(139, 75, 155)")
+        newLine.setAttribute("stroke-width", "6")
+        svg.appendChild(newLine);
+    };
+
+    // $('#videofeed')
+    // .on('mouseover', function(){
+    //   $(this).children('#videofeed-img').css({'transform': 'scale(2)'});
+    // })
+    // .on('mouseout', function(){
+    //   $(this).children('#videofeed-img').css({'transform': 'scale(1)'});
+    // })
+    // .on('mousemove', function(e){
+    //   $(this).children('#videofeed-img').css({'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'});
+    // })
+
+    var container = document.getElementById("videofeed");
+    var img = document.getElementById("videofeed-img");
+
+    container.onmouseover = function() {
+        img.style.transform = 'scale(' + zoomScaleMeasure + ')'
+    }
+
+    container.onmouseout = function() {
+        img.style.transform = 'scale(1)'
+    }
+
+    container.onmousemove = function(e) {
+        img.style.transformOrigin = ((e.pageX - this.offsetLeft) / this.offsetWidth) * 100 + '%'
+                                  + ((e.pageY - this.offsetTop) / this.offsetHeight) * 100 + '%'
+    } 
+
+
+
+    onmousedown = function(e) {
+        if (inSelection == true){
+        inDrawning =  true;
+        x1 = e.clientX;
+        y1 = e.clientY;
+        container.onmousemove = function(e) {}
+        }
+    };
+
+    onmousemove = function(e) {
+        if (inSelection == true){
+            if (inDrawning == true){
+            x2 = e.clientX;
+            y2 = e.clientY;
+            drawLine();
+            }
+        }
+    };
+
+    onmouseup = function(e){
+        
+        if (inSelection == true){
+            img.style.transform = 'scale(1)';
+            container.onmouseover = function(){}
+            inSelection = false;
+            inDrawning = false;
+
+            document.getElementById("line").remove();
+            svg.style.display="none";
+            var dist = Math.abs(Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2))) / zoomScaleMeasure;
+            console.log(dist);
+            if (objectiveSelected == null){
+                alert("Create an objective to measure a selection")
+            } else {
+                var returnedData = JSON.parse(localStorage["objectives"]);
+                var objectiveSelectedRatio = returnedData[objectiveSelected.index][1];
+                var sizeOfSelection = objectiveSelectedRatio * dist;
+                objSelections[buttonObject.index].size = sizeOfSelection;
+                objSelectionsBackEnd[buttonObject.index].size = sizeOfSelection;
+                dataPipe.selections = objSelectionsBackEnd
+                
+                console.log(objectiveSelectedRatio * dist);
+                updateSelectionDiv();
+                
+                
+            }
+        }
+        console.log('measure');
+        
+        showSidebar()
+    }
+}
+
+var updateSelectionDiv = function(){
+    var boldingRectangle = document.getElementById('bolding-rectangle');
+    var elements = document.getElementsByClassName("selection-div");
+    while(elements.length > 0){
+    elements[0].parentNode.removeChild(elements[0]);
+    };
+
+    for (var i = 0; i < objSelections.length; i++) {
+        var newDiv = document.createElement('div');
+        newDiv.className = 'selection-div';
+        newDiv.index = i;
+        newDiv.id = "selection-div-" + i.toString();
+
+        var newTextDiv = document.createElement('div')
+        newTextDiv.className ="selection-text-div"
+        newTextDiv.innerHTML = "selection " + i.toString() ;
+
+        var sizeDiv = document.createElement('div');
+        
+        if (objSelections[i].size != null){
+            console.log('not null');
+            
+            sizeDiv.innerHTML = (objSelections[i].size * 1e6).toFixed(4);
+        }
+        
+        sizeDiv.className = "size-div";
+        sizeDivList.push(sizeDiv);
+        
+
+        var trashButton = document.createElement('button');
+        trashButton.id = "trash-button-" + i.toString();
+        trashButton.className = 'trash-btn'
+        trashButton.innerHTML = '<i class="fa fa-trash fa-fw  fa-lg" aria-hidden="true"></i>';
+        trashButton.index = i;
+        trashButton.func = function(){
+            console.log("delete", this.index);
+            this.parentNode.parentNode.removeChild(this.parentNode);
+            objSelections.splice(this.index, 1);
+            objSelectionsBackEnd.splice(this.index, 1);
+            dataPipe.selections = objSelectionsBackEnd;  
+            updateSelectionDiv();
+            if (document.getElementById("bolding-rect")){
+                document.getElementById("bolding-rect").remove();}
+        };
+        trashButton.setAttribute('onclick', "this.func()")
+
+        var rulerButton = document.createElement('button');
+        rulerButton.id = "ruler-button-" + i.toString();
+        rulerButton.className = 'ruler-btn'
+        rulerButton.innerHTML = '<i class="fa fa-ruler fa-fw  fa-lg" aria-hidden="true"></i>';
+        rulerButton.index = i;
+        rulerButton.func = function(){measure(this)};
+        rulerButton.setAttribute('onclick', "this.func()")
+
+        newDiv.onmouseover = function(){
+            // boldingRectangle.hidden = 0;
+            
+            var hoverx1 = objSelections[this.index].x1
+            var hovery1 = objSelections[this.index].y1
+            var hoverx2 = objSelections[this.index].x2
+            var hovery2 = objSelections[this.index].y2
+            var svg = document.getElementById("svg-overlay");
+            svg.style.display="block"
+
+                if (document.getElementById("bolding-rect")){
+                document.getElementById("bolding-rect").remove();}
+                
+                var boldingRect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+                boldingRect.setAttribute('id','bolding-rect');
+                boldingRect.setAttribute('x',Math.min(hoverx1, hoverx2));
+                boldingRect.setAttribute('y',Math.min(hovery1, hovery2));
+                boldingRect.setAttribute('width',Math.max(hoverx1, hoverx2) - Math.min(hoverx1, hoverx2));
+                boldingRect.setAttribute('height',Math.max(hovery1, hovery2) - Math.min(hovery1, hovery2));
+                boldingRect.setAttribute("stroke", "rgb(255, 0, 0)")
+                boldingRect.setAttribute("stroke-width", "3")
+                boldingRect.setAttribute("fill", "none")
+                svg.appendChild(boldingRect);
+
+            console.log("section :" ,this.id, "was hovered"); 
+            console.log(hoverx1, hovery1);
+            
+        };
+
+        newDiv.onmouseout = function(){
+            if (document.getElementById("bolding-rect")){
+                document.getElementById("bolding-rect").remove();}
+        };
+
+        document.getElementById('mySelections').appendChild(newDiv);
+        newDiv.appendChild(newTextDiv);
+        newDiv.appendChild(sizeDiv);
+        newDiv.appendChild(trashButton);
+        newDiv.appendChild(rulerButton);
+
+    };
+};
+
+
+var objSelections = [];
+var objSelectionsBackEnd = [];
+function DrawSelectionOnScreen(){
+    hideSidebar()
+    // document.getElementById("tips").innerHTML = '<img src="static/selection2.png" alt="selection help" >'
+    var div = document.getElementById('hidden-div'), x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+    var img = document.getElementById('videofeed-img'); 
+    document.getElementById('add-button').style.backgroundColor="rgb(95, 161, 247)";
+    document.getElementById('add-button').onmouseleave = function(){}
+    var width = img.clientWidth;
+    var height = img.clientHeight;
+
+    var inSelection = true
+    var svg = document.getElementById("svg-overlay");
+    svg.style.display="block"
+    var inSelection = true;
+    var inDrawning = false;
+
+    function drawRect(){
+        if (document.getElementById("rect")){
+        document.getElementById("rect").remove();}
+        console.log("1",x1, y1);
+        console.log("2",x2, y2);
+        
+        var rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+        rect.setAttribute('id','rect');
+        rect.setAttribute('x',Math.min(x1, x2));
+        rect.setAttribute('y',Math.min(y1, y2));
+        rect.setAttribute('width',Math.max(x1, x2) - Math.min(x1, x2));
+        rect.setAttribute('height',Math.max(y1, y2) - Math.min(y1, y2));
+        rect.setAttribute("stroke", "rgb(255, 255, 255)")
+        rect.setAttribute("stroke-width", "3")
+        rect.setAttribute("fill", "none")
+        svg.appendChild(rect);
+        return [x1, y1, x2, y2]
+    };
+
+    var container = document.getElementById("videofeed");
+    var img = document.getElementById("videofeed-img");
+
+
+    onmousedown = function(e) {
+        if (inSelection == true){
+        inDrawning =  true;
+        x1 = e.clientX;
+        y1 = e.clientY;
+        container.onmousemove = function(e) {}
+        }
+    };
+
+    onmousemove = function(e) {
+        if (inSelection == true){
+            if (inDrawning == true){
+            x2 = e.clientX;
+            y2 = e.clientY;
+            drawRect();
+            }
+        }
+    };
+    onmouseup = function(e) {
+
+        if (inSelection == true){
+            console.log("me");
+            showSidebar()
+            document.getElementById('add-button').style.backgroundColor="inherit";
+            document.getElementById('add-button').onmouseover = function(){
+                this.style.backgroundColor="#ddd";
+            };
+            document.getElementById('add-button').onmouseleave = function(){
+                this.style.backgroundColor="inherit";
+            };
+
+            div.hidden = 1;
+            inSelection = false;
+
+            var AddNewSelection = function(){
+                var offsets = document.getElementById('videofeed-img').getBoundingClientRect();
+            var top = offsets.top;
+            var left = offsets.left;
+            Rx1 = (x1 - left)/ width;
+            Ry1 = (y1 - top ) / height;
+            Rx2 = (x2 - left) / width;
+            Ry2 = (y2 - top)/ height;
+
+            objSelections.push({"x1": drawRect()[0],
+                                "y1": drawRect()[1],
+                                "x2": drawRect()[2],
+                                "y2": drawRect()[3],
+                                "size": null
+                                });
+            objSelectionsBackEnd.push({"x1": Rx1,
+                                        "y1": Ry1,
+                                        "x2": Rx2,
+                                        "y2": Ry2,
+                                        "size": null
+                                        });
+            dataPipe.selections = objSelectionsBackEnd;
+            console.log(objSelectionsBackEnd);
+            
+
+            updateSelectionDiv()
+            };
+            AddNewSelection();
+            if (document.getElementById("rect")){
+                document.getElementById("rect").remove();
+            }
+            // document.getElementById("tips").innerHTML = '<img src="static/wannameasure.png" alt="selection help" >'
+            
+        }
+
+
+    };
+
+};
+
+var returnedState = 1
+function checkTrackingState(){
+
+    
+    $.get("{{url_for('trackingstate')}}", function(data, status){
+        var returnedData = JSON.parse(data);      
+        returnedState = returnedData.trackingState
+        console.log(returnedState);
+        if( returnedState != 2){
+        console.log("returnedstate not good");
+        
+        setTimeout( checkTrackingState, 3000 );
+        } else {
+        console.log("tracking finished");
+        window.location = "{{url_for('results')}}";
+    }
+    });
+    
+
+    
+    
+}
+
+function start_tracking(){
+    hideSidebar();
+    dataPipe.state = 1;
+    document.getElementById("videofeed-img").src="{{ url_for('video_feed_tracking') }}";
+    checkTrackingState();
+};
+
+
+var objectiveSelected = null;
+var selectObjective = function(obj){
+    console.log("select objective", obj.index);
+    var objectiveDivs = document.getElementsByClassName("objective-div");
+    for (var i = 0; i < objectiveDivs.length; i++){
+        objectiveDivs[i].style.backgroundColor = "inherit"
+        
+        objectiveDivs[i].onmouseover = function(){
+        this.style.backgroundColor = "ddd"
+        };
+        objectiveDivs[i].onmouseout = function(){
+            this.style.backgroundColor = "inherit"
+        };
+        
+    }
+    obj.style.backgroundColor = "rgb(139, 75, 155)";
+    obj.onmouseover = function(){
+        this.style.backgroundColor = "rgb(139, 75, 155)"
+    };
+    obj.onmouseout = function(){
+        
+        this.style.backgroundColor = "rgb(139, 75, 155)"
+    };
+    objectiveSelected = obj
+}
+var sizeDivList = []
+var objectivesTextInputs = []
+var updateObjectivesDiv = function(){
+    var elements = document.getElementsByClassName("objective-div");
+    localStorageObjectivesList = JSON.parse(localStorage.getItem('objectives'));
+    objectivesTextInputs = []
+
+    while(elements.length > 0){
+        elements[0].parentNode.removeChild(elements[0]);
+    }
+    
+    for (var i = 0; i < localStorageObjectivesList.length; i++) {            
+        var newDiv = document.createElement('div');
+        newDiv.className = 'objective-div';
+        newDiv.index = i;
+        newDiv.id = "objective-div-" + i.toString();
+        newDiv.func = function(){selectObjective(this)};
+        newDiv.setAttribute("onclick", "this.func()")
+
+        var newTextDiv = document.createElement('div')
+        newTextDiv.className ="objective-text-div";
+
+        if (localStorageObjectivesList[i][0] != ""){
+            var ObjectiveNameDiv = document.createElement('div');
+            ObjectiveNameDiv.innerHTML = localStorageObjectivesList[i][0];
+            ObjectiveNameDiv.style.width = "50%";
+            ObjectiveNameDiv.className = "objective-text-div";
+            newDiv.appendChild(ObjectiveNameDiv);
+        } else {
+        var objectiveNameTextInput = document.createElement('INPUT');
+        objectiveNameTextInput.index = i;
+        objectiveNameTextInput.setAttribute("type", "text");
+        objectiveNameTextInput.defaultValue = localStorageObjectivesList[i][0];
+        objectiveNameTextInput.className = "objective-text-div";
+        objectiveNameTextInput.func = function(){
+            var localStorageObjectivesList = JSON.parse(localStorage.getItem('objectives'))
+            localStorageObjectivesList[this.index][0] = this.value;
+            localStorage.setItem("objectives", JSON.stringify(localStorageObjectivesList));
+            var ObjectiveNameDiv = document.createElement('div');
+            ObjectiveNameDiv.innerHTML = this.value;
+            ObjectiveNameDiv.style.width = "50%"
+            ObjectiveNameDiv.className = "objective-text-div";
+            if (this.value != ""){
+            objectiveNameTextInput.parentNode.replaceChild(ObjectiveNameDiv, this);
+            }
+        }
+        objectiveNameTextInput.setAttribute("onfocusout", "this.func()");
+        objectivesTextInputs.push(objectiveNameTextInput);
+        newDiv.appendChild(objectiveNameTextInput);
+        }
+
+
+        var trashButton = document.createElement('button');
+        trashButton.id = "trash-button-objective-" + i.toString();
+        trashButton.className = 'trash-btn'
+        trashButton.innerHTML = '<i class="fa fa-trash fa-fw  fa-lg" aria-hidden="true"></i>';
+        trashButton.index = i;
+        trashButton.func = function(){
+            var localStorageObjectivesList = JSON.parse(localStorage.getItem("objectives"));
+            this.parentNode.parentNode.removeChild(this.parentNode);
+            localStorageObjectivesList.splice(this.index, 1);
+            localStorage.setItem("objectives", JSON.stringify(localStorageObjectivesList))
+            updateObjectivesDiv();
+        }
+        trashButton.setAttribute('onclick', "this.func()")
+
+        document.getElementById('myObjectives').appendChild(newDiv);
+        newDiv.appendChild(trashButton);
+        
+        
+
+        }
+    }
+function addObjective(){
+    hideSidebar()
+    // document.getElementById("tips").innerHTML = '<img src="static/calibrationhelp2.png" alt="go measure selections" >'
+    var svg = document.getElementById("svg-overlay");
+    svg.style.display="block"
+    var inSelection = true;
+    var inDrawning = false;
+
+    function drawLine(){
+        if (document.getElementById("line")){
+        document.getElementById("line").remove();}
+        var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+        newLine.setAttribute('id','line');
+        newLine.setAttribute('x1',x1);
+        newLine.setAttribute('y1',y1);
+        newLine.setAttribute('x2',x2);
+        newLine.setAttribute('y2',y2);
+        newLine.setAttribute("stroke", "green")
+        newLine.setAttribute("stroke-width", "6")
+        svg.appendChild(newLine);
+    };
+
+    var container = document.getElementById("videofeed");
+    var img = document.getElementById("videofeed-img");
+
+    container.onmouseover = function() {
+        img.style.transform = 'scale(' + zoomScaleMeasure + ')'
+    }
+
+    container.onmouseout = function() {
+        img.style.transform = 'scale(1)'
+    }
+
+    container.onmousemove = function(e) {
+        img.style.transformOrigin = ((e.pageX - this.offsetLeft) / this.offsetWidth) * 100 + '%'
+                                  + ((e.pageY - this.offsetTop) / this.offsetHeight) * 100 + '%'
+    } 
+
+    onmousedown = function(e) {
+        if (inSelection == true){
+        container.onmousemove = function(e) {}
+        inDrawning =  true;
+        x1 = e.clientX;
+        y1 = e.clientY;
+        }
+    };
+
+    onmousemove = function(e) {
+        if (inSelection == true){
+            if (inDrawning == true){
+            x2 = e.clientX;
+            y2 = e.clientY;
+            drawLine();
+            }
+        }
+    };
+
+    onmouseup = function(e){
+        if (inSelection == true){
+            showSidebar()
+        img.style.transform = 'scale(1)';
+        container.onmouseover = function(){}
+        inSelection = false;
+        inDrawning = false;
+
+        var real_dist = prompt("Distance measured (in m)", "100");
+        document.getElementById("line").remove();
+        svg.style.display="none";
+        var dist = Math.abs(Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2)) / zoomScaleMeasure);
+        var ratio = real_dist / dist;
+        var localStorageObjectivesList = JSON.parse(localStorage.getItem('objectives'))
+        if (localStorageObjectivesList == null){
+            localStorageObjectivesList = [];
+        }
+        localStorageObjectivesList.push(["",ratio])
+        localStorage.setItem('objectives', JSON.stringify(localStorageObjectivesList));
+        updateObjectivesDiv();
+        objectivesTextInputs[objectivesTextInputs.length - 1].focus();
+        objectivesTextInputs[objectivesTextInputs.length - 1].select();
+        }
+
+    }
+    
+}
+
+window.onload = function(){
+    console.log("load");
+    updateObjectivesDiv();
+
+    
+};
+
+
+</script>

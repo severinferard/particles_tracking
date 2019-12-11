@@ -1,0 +1,329 @@
+<style>
+
+body{
+    font-family: 'Solway', serif;
+    margin: 0;
+    padding: 0;
+}
+#main-div {
+    position: absolute;
+    border: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    text-align: center;
+
+}
+#main-div > button {
+    position: relative;
+    padding: 10px;
+}
+
+#csv {
+    left: 15vw;
+}
+
+#excel {
+    right: 15vw;
+}
+
+button {
+    background: inherit;
+    outline: none;
+    border: none;
+    padding: 10px;
+    transition: .2s;
+    border-radius: 10px;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+button:active {
+    background-color: rgb(95, 161, 247);
+}
+
+#title {
+    font-size: 50px;
+    border: 2px solid #ddd;
+    margin-top: 0;
+    margin-bottom: 10vh;
+    margin-left: 0;
+    text-align: left;
+    padding: 10px;
+    color: white;
+    background-color: #99cf83;
+
+}
+
+canvas{
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+    display: block;
+    height: auto !important;
+    width: 90% !important;
+}
+
+#files-title{
+    font-size: 30px;
+    border: 2px solid #ddd;
+    margin: auto;
+    margin-top: 0;
+    margin-bottom: 10vh;
+    text-align: left;
+    padding: 10px;
+    color: white;
+    background-color: #99cf83;
+    width: 90%;
+}
+table{
+    border: none;
+    margin: auto;
+    background-color: rgb(253, 253, 253);
+    padding: 0px;
+    width: 30%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-collapse: collapse;
+    color: white;
+    border-radius: 10px;
+}
+
+td{
+    text-align:center;
+    padding-top: 10px;
+    width: 50%;
+}
+#th1{
+    background-color: #6F7AD9;
+    border-top-left-radius: 10px;
+}
+
+#th2{
+    background-color: #6F7AD9;
+    border-top-right-radius: 10px;
+    padding: 5px;
+}
+
+tr{
+    
+
+}
+
+
+</style>
+<link href="https://fonts.googleapis.com/css?family=Solway&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Varela&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.4"></script>
+<html>
+    
+        <div id="main-div">
+            <div id="title">Results</div>
+            <h2>Trajectories</h2>
+            <canvas id="myChart"></canvas>
+            <h2>Sizes</h2>
+            <canvas id="pie"></canvas>
+            
+            <div id="files-title">Files</div>
+            <table>
+                <tr>
+                    <th id="th1">Download CSV</th>
+                    <th id="th2">Open Excel</th>
+                </tr>
+                <tr>
+                        <td><button type="submit" form="form1" id="csv" onclick="openCSV()"><i class="fas fa-file-csv fa-5x"></i></button></td>
+                        <td><button id="excel" onclick="openXLSX()"><i class="fas fa-file-excel fa-5x"></i></button></td>
+                    </tr>
+            </table>
+            <br>
+            <br>
+        </div>
+        <form action="{{url_for('downloadCSV')}}" method="get" id="form1"></form>
+    <!-- <input id="file-input" type="file" name="name" style="display: none;" /> -->
+</html>
+
+<script>
+function openCSV(){
+    $.get("{{url_for('downloadCSV')}}", function(data, status){});
+    $.post( "/results", {
+            'fileToOpen' : 'CSV'});
+}
+function openXLSX(){
+    $.post( "/results", {
+            'fileToOpen' : 'Excel'});
+}
+
+var colorArray = ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC'];
+
+$.getJSON("{{url_for('positions')}}", function(data, status){
+    
+    var positions = data["pos"]
+    var width = data["width"]
+    var height = data["height"]
+    var sizes = data["sizes"]
+    console.log(sizes);
+    
+    var groupedSizes = {"1" : 0,
+                        "2" : 0,
+                        "3" : 0,
+                        "4" : 0,
+                        "5" : 0,
+                        "6" : 0,
+                        "7" : 0,
+                        "8" : 0,
+                        "9" : 0,
+                        "10" : 0,
+                        "None" : 0
+                        }
+
+    console.log(sizes.length);
+    
+    // for (var i = 0; i<sizes.length; i++){
+    //     console.log(i);
+        
+    //     for (var s = 1; s<=10; s++){   
+    //         console.log(s);
+                     
+    //         if (sizes[i] > s && sizes[i] < s+1){
+    //             groupedSizes[s.toString()]+= 1
+    //             console.log("test");
+                
+    //         } 
+    //     }
+    // }
+    for (var i = 0; i<sizes.length; i++){
+        if (sizes[i] == null) {
+            groupedSizes["None"] += 1
+        } else {
+            console.log(sizes[i].toString()[0]);
+            groupedSizes[sizes[i].toString()[0]] += 1
+        }
+    }
+
+sizesForPie = [groupedSizes["1"], groupedSizes["2"], groupedSizes["3"], groupedSizes["4"], groupedSizes["5"], groupedSizes["6"], groupedSizes["7"],groupedSizes["8"], groupedSizes["9"], groupedSizes["10"], groupedSizes["None"]]
+console.log(sizesForPie);
+
+console.log(groupedSizes);
+var pie = document.getElementById('pie');
+var myDoughnutChart = new Chart(pie, {
+    type: 'doughnut',
+    data: {
+        labels: [
+        '0 - 1',
+        '1 - 2',
+        '2 - 3',
+        '3 - 4',
+        '4 - 5',
+        '5 - 6',
+        '6 - 7',
+        '8 - 9',
+        '9 - 10',
+        'None'
+        ],
+        datasets: [{
+            data: sizesForPie,
+            backgroundColor: ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC']
+        }],
+    
+    // These labels appear in the legend and in the tooltips when hovering different arcs
+    
+    
+},
+    options: {}
+});
+    
+    var datasets = []
+    for (var particle in positions){
+        var data = []
+        for (var t=0; t<positions[particle].length; t++){
+            var x = positions[particle][t][0]
+            var y = height - positions[particle][t][1]
+            data.push({x: x, y: y})
+        }
+        datasets.push({label : particle, data: data, pointBackgroundColor: colorArray[(Math.floor(Math.random() * 50) + 1)],
+            pointRadius: 5,
+            fill: false,
+            showLine: false})
+    }
+
+    var ctx = document.getElementById('myChart');
+    var scatterChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: datasets
+        },
+        options: {
+            legend: {
+                position: 'right'
+            },
+            responsive:true,
+            scales: {
+                xAxes: [{
+                    type: 'linear',
+                    position: 'bottom',
+                    ticks: {
+                        display: false,
+                        min: 0,
+                        max: width
+                    }
+                }],
+                yAxes: [{
+                    type: 'linear',
+                    position: 'left',
+                    ticks: {
+                        display: false,
+                        min: 0,
+                        max: height
+                    }
+                }]
+            },
+            pan: {
+                enabled: false,
+                mode: "xy",
+                speed: 10,
+                threshold: 10
+            },
+            zoom: {
+            enabled: false,
+            drag: false,
+            mode: "xy",
+            limits: {
+                max: 1,
+                min: 0.5
+            },
+            speed: .05
+            }
+        }
+    });
+    
+    ctx.onclick = function(){
+        
+        
+        scatterChart.options.pan.enabled = true;
+        scatterChart.options.zoom.enabled = true;
+        scatterChart.update()
+    }  
+    ctx.onmouseout = function(){
+        scatterChart.options.pan.enabled = false;
+        scatterChart.options.zoom.enabled = false;
+        scatterChart.update()
+    }
+});
+
+
+
+
+</script>

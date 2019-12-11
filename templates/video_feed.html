@@ -1,0 +1,79 @@
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'frame frame sidebar '
+    'frame frame sidebar '
+	'footer footer sidebar ';
+  grid-gap: 10px;
+  background-color: #2196F3;
+  padding: 10px;
+  width: 100vw;
+  height: 100vh;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+}
+
+.frame-div {
+  grid-area: frame;
+}
+
+.sidebar-div {
+  grid-area: sidebar;
+}
+
+.footer-div {
+	grid-area: footer;
+}
+
+</style>
+</head>
+
+<body>
+
+
+<div class="grid-container">
+
+  <div class="frame-div">
+
+	  <img src="{{ url_for('video_feed') }}">
+  </div>
+
+  <div class="sidebar-div">
+	 <div class="size-min">
+		 <p>Minimum particle size</p>
+  		<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+	</div>
+	<div class="size-max">
+		<p>Maximum particle size</p>
+	   <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+   </div>
+  </div>
+  <div class="footer-div">4</div>
+
+</div>
+
+
+
+
+
+<form action="">
+	Select a file: <input type="file" name="myFile"><br><br>
+	<input type="submit">
+</form> -->

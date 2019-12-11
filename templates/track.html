@@ -1,0 +1,59 @@
+<html>
+<head>
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+    <title>Tracking</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+    <style media="screen">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #screen-div {
+            background-image: url("http://localhost:5000/video_feed");
+            height: 100%;
+            width: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        #stop-button {
+            position:absolute;
+            transition: .5s ease;
+            top: 95%;
+            left: 95%;
+            font-weight: bold;
+            font-size: 20;
+
+        }
+    </style>
+    <script type="text/javascript">
+
+    </script>
+</head>
+
+<body>
+    <div id="screen-div">
+        <img src="{{url_for('video_feed')}}" alt="">
+        <div id="progressbar"></div>
+        <button type="button" name="button" id="stop-button">Stop</button>
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+
+
+
+
+
+    </script>
+
+
+</body>
+</html>
